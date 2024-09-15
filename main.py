@@ -1,29 +1,51 @@
 import argparse
-from runge_kutta import runge_kutta_2_cartesian
-from plot_and_error import plot_orbit_and_error
-from plot import plot
+from plot_orbit import plot_orbit 
+from plot_orbit import polar_to_cartesian
+from euler_polar import euler_polar
+from euler_cartesian import euler_cartesian
+from rk2_cartesian import rk2_cartesian
+from rk2_polar import rk2_polar
+from analytical import analytical
+import matplotlib.pyplot as plt
 
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--x0', type=float)
-    parser.add_argument('--y0', type=float)
-    parser.add_argument('--vx0', type=float)
-    parser.add_argument('--vy0', type=float)
-    parser.add_argument('--tf', type=float)
-    parser.add_argument('--dt', type=float)
-    
+    parser.add_argument('--c10', type=float, required=True)
+    parser.add_argument('--c20', type=float, required=True) 
+    parser.add_argument('--vc10', type=float, required=True)    
+    parser.add_argument('--vc20', type=float, required=True)
+    parser.add_argument('--tf', type=float, required=True)
+    parser.add_argument('--dt', type=float, required=True)
+    parser.add_argument('--method1', choices=['euler_cartesian', 'euler_polar', 'rk2_cartesian', 'rk2_polar', 'analytical'])
+    parser.add_argument('--method2', choices=['euler_cartesian', 'euler_polar', 'rk2_cartesian', 'rk2_polar', 'analytical'])
+
+
     args = parser.parse_args()
 
-    IC = [args.x0, args.y0, args.vx0, args.vy0]
-    solution, time = runge_kutta_2_cartesian(IC, args.tf, args.dt)
+    IC = [args.c10, args.c20, args.vc10, args.vc20]
 
-    plot(time, solution)
+    if 'polar' in args.method1:
+        solution1, time1 = globals()[args.method1](IC, args.tf, args.dt)
+        method_type1 = 'polar'
+    else:
+        solution1, time1 = globals()[args.method1](IC, args.tf, args.dt)
+        method_type1 = 'cartesian'
 
-    #plot_orbit_and_error(solution, time, args.x0, args.y0, args.vx0, args.vy0, args.tf, args.dt) #circular  orbit
+    solution2, method_type2 = None, None
+    if args.method2:
+        if 'polar' in args.method2:
+            solution2, time2 = globals()[args.method2](IC, args.tf, args.dt)
+            method_type2 = 'polar'
+        else:
+            solution2, time2 = globals()[args.method2](IC, args.tf, args.dt)
+            method_type2 = 'cartesian'
+
+    plot_orbit(time1, solution1, args.method1, solution2, args.method2)
+
 
 
 if __name__ == "__main__":
     main()
 
-#python3 main.py --x0 1.0 --y0 0.0 --vx0 0.0 --vy0 1.0 --tf 3 --dt 0.01
+#python3 main.py --c10 1.0 --c20 0.0 --vc10 0.0 --vc20 1.0 --tf 1 --dt 0.1 --method1 euler_polar --method2 analytical
