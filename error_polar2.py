@@ -22,12 +22,13 @@ def totalerrors(method, dt_values, IC, tf):
         r0 = IC[0]
         phi0 = IC[1]
 
-
-        phi_an = np.sqrt(G*M/r0**3)*time
+        time_an = np.linspace(0, tf, 1000)
+        phi_an = np.sqrt(G*M/r0**3)*time_an
         r_an = r0
-    
+        phi_an_inter = np.interp(np.linspace(0, tf, len(phi)), time_an, phi_an)
 
-        error_phi = np.abs(phi - phi_an)
+
+        error_phi = np.abs(phi - phi_an_inter)
         error_r = np.abs(r - r_an)
         total_absolute_error = np.mean(np.sqrt(error_phi**2 + error_r**2))
         errors.append(total_absolute_error)
@@ -62,7 +63,7 @@ def main():
     plt.title('Relation between error and dt')
     plt.grid(True)
     plt.legend()
-    plt.xlim(right=np.max(dt_values) * 0.6)
+    plt.xlim(right=np.max(dt_values)*0.6 )
 
     plt.show()
 
