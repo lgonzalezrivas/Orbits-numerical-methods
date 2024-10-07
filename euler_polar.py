@@ -1,6 +1,6 @@
 import numpy as np
 
-G, M, m = 1, 1, 1  
+G, M,m = 1, 1, 1  
 
 def euler_polar(IC, tf, dt):
     r, phi, vr, vphi = IC
@@ -8,19 +8,22 @@ def euler_polar(IC, tf, dt):
     time = np.arange(0, tf, dt)
     solution = np.zeros((len(time), 4))
     solution[0] = [r, phi, vr, vphi]
-    dphi = vphi / r
-    l = m * r**2 * dphi
 
     for i in range(1, len(time)):
-        dphi = l / (m * r**2)
-        phi += dt * dphi
-        vphi = dphi * r
+        dphi= vphi/r
+        dr= vr
 
-        d2r = l**2 / (m**2 * r**3) - G * M / r**2
-        vr += dt * d2r
+        d2r = r*dphi**2 - G*M/r**2
+        d2phi= -2*dr * dphi/r
+
 
         r += dt * vr
+        phi += dt * dphi
+        vr +=  dt * d2r
+        dphi+= dt* d2phi
 
+
+        vphi=r*dphi
         solution[i] = [r, phi, vr, vphi]
 
     return solution, time

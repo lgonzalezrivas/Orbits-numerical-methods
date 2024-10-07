@@ -24,8 +24,8 @@ def rk2_cartesian(IC, tf, dt):
         ay_pred = -G*M*y_pred/r_pred**3  
         k2 = np.array([vx_pred,vy_pred, ax_pred, ay_pred])   
 
-        x += 0.5*dt*(k1[0] + k2[0])
-        y += 0.5*dt*(k1[1] + k2[1])
+        x += 0.5 * dt * (k1[0] + k2[0])
+        y += 0.5 * dt * (k1[1] + k2[1])
         vx += 0.5*dt*(k1[2] + k2[2])
         vy += 0.5*dt*(k1[3] + k2[3])
 

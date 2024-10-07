@@ -11,12 +11,13 @@ def euler_cartesian(IC, tf, dt):
         r = np.sqrt(x**2 + y**2)
         ax = -G*M*x/r**3
         ay = -G*M*y/r**3
-
+        
+        x += dt*vx
+        y += dt*vy
 
         vx += dt*ax
         vy += dt*ay
-        x += dt*vx
-        y += dt*vy
+
 
         solution[i] = [x,y,vx,vy]
 
