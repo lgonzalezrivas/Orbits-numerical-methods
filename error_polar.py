@@ -7,6 +7,8 @@ from rk2_polar import rk2_polar
 G = 1
 M = 1
 m=1
+k = G*M*m
+
 
 def totalerrors(method, dt_values, IC, tf):
     errors = []
@@ -21,18 +23,36 @@ def totalerrors(method, dt_values, IC, tf):
         phi = solution[:, 1]  
         r0 = IC[0]
         phi0 = IC[1]
+        vr0 = IC[2]
+        vphi0= IC[3]
 
+        L = m*r0 * vphi0 
+        E = 0.5 * m*(vr0**2 + vphi0**2) - (G * M*m / r0)  
 
-        phi_an = np.sqrt(G*M/r0**3)*time
-        r_an = r0
-    
+        a = -G * M*m / (2 * E)
+        e = np.sqrt(1 + (2 * E * L**2) / (k**2))
+        if e == 0.0:
+            phi_an = np.sqrt(G*M/r0**3)*time +phi0
+            r_an = r0
 
-        error_phi = np.abs(phi - phi_an)
-        error_r = np.abs(r - r_an)
+            error_phi = np.abs(phi - phi_an)
+            error_r = np.abs(r - r_an)
+
+        elif 0.0 < e < 1.0:
+            n = np.sqrt(G * (M) / a**3)  
+            Mean = n * time  
+            E = Mean  
+            for _ in range(1000):  
+                E = Mean + e * np.sin(E)
+
+            phi_an = 2 * np.arctan(np.sqrt((1 + e) / (1 - e)) * np.tan(E / 2)) 
+            r_an = a * (1 - e**2) / (1 + e * np.cos(phi_an))  
+            error_phi = np.abs(phi - phi_an-phi0)
+            error_r = np.abs(r - r_an)
         total_absolute_error = np.mean(np.sqrt(error_phi**2 + error_r**2))
         errors.append(total_absolute_error)
-
     return errors
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -57,12 +77,13 @@ def main():
         errors2 = totalerrors(args.method2, dt_values, IC, args.tf)
         plt.loglog(dt_values, errors2, marker='o', linestyle='--', color='red',label=f'{args.method2}')
 
+
+
     plt.xlabel('dt')
     plt.ylabel('Absolute error')
     plt.title('Relation between error and dt')
     plt.grid(True)
     plt.legend()
-    plt.xlim(right=np.max(dt_values) * 0.6)
 
     plt.show()
 

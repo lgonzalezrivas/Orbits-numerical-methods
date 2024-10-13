@@ -5,7 +5,8 @@ from euler_polar import euler_polar
 from euler_cartesian import euler_cartesian
 from rk2_cartesian import rk2_cartesian
 from rk2_polar import rk2_polar
-from analytical import analytical
+from analytical import analytical_polar
+from analytical import analytical_cartesian
 import matplotlib.pyplot as plt
 
 
@@ -17,8 +18,8 @@ def main():
     parser.add_argument('--vc20', type=float, required=True)
     parser.add_argument('--tf', type=float, required=True)
     parser.add_argument('--dt', type=float, required=True)
-    parser.add_argument('--method1', choices=['euler_cartesian', 'euler_polar', 'rk2_cartesian', 'rk2_polar', 'analytical'])
-    parser.add_argument('--method2', choices=['euler_cartesian', 'euler_polar', 'rk2_cartesian', 'rk2_polar', 'analytical'])
+    parser.add_argument('--method1', choices=['euler_cartesian', 'euler_polar', 'rk2_cartesian', 'rk2_polar', 'analytical_polar', 'analytical_cartesian'])
+    parser.add_argument('--method2', choices=['euler_cartesian', 'euler_polar', 'rk2_cartesian', 'rk2_polar', 'analytical_polar', 'analytical_cartesian'])
 
 
     args = parser.parse_args()
@@ -42,7 +43,6 @@ def main():
             method_type2 = 'cartesian'
 
     plot_orbit(time1, solution1, args.method1, solution2, args.method2)
-
 
 
 if __name__ == "__main__":
