@@ -70,7 +70,7 @@ def main():
     parser.add_argument('--method2', type=str, choices=['rk2_cartesian', 'euler_cartesian'], default=None)
     args = parser.parse_args()
 
-    dt_values = np.logspace(-4, 0, 20)
+    dt_values = np.logspace(-4, 0, 10)
     IC = [args.c10, args.c20, args.vc10, args.vc20]
 
     plt.figure(figsize=(12, 6))

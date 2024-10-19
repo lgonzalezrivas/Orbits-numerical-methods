@@ -11,8 +11,8 @@ def analytical_cartesian(IC, tf, dt):
     y0 = IC[1]
     vx0 = IC[2]
     vy0= IC[3]
-    time = np.linspace(0, tf, 1000)
-    
+    num_t = int(tf / dt)
+    time = np.linspace(0, tf, num_t)    
     r0 = np.sqrt(x0**2 + y0**2)
     v0 = np.sqrt(vx0**2 + vy0**2)
     phi0 = np.arctan2(y0, x0)
@@ -46,8 +46,8 @@ def analytical_polar(IC, tf, dt):
     phi0 = IC[1]
     vr0 = IC[2]        
     vphi0 = IC[3]
-    time = np.linspace(0, tf, 1000)
-    
+    num_t = int(tf / dt)
+    time = np.linspace(0, tf, num_t) 
     L = m*r0 * vphi0 
     E = 0.5 * m*(vr0**2 + vphi0**2) - (G * M*m / r0) 
 

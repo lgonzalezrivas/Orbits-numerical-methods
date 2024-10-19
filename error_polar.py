@@ -49,6 +49,7 @@ def totalerrors(method, dt_values, IC, tf):
             r_an = a * (1 - e**2) / (1 + e * np.cos(phi_an))  
             error_phi = np.abs(phi - phi_an-phi0)
             error_r = np.abs(r - r_an)
+        
         total_absolute_error = np.mean(np.sqrt(error_phi**2 + error_r**2))
         errors.append(total_absolute_error)
     return errors
@@ -65,7 +66,7 @@ def main():
     parser.add_argument('--method2', type=str, choices=['rk2_polar', 'euler_polar'], default=None)
     args = parser.parse_args()
 
-    dt_values = np.logspace(-4, 0, 20)
+    dt_values = np.logspace(-4, 0, 10)
     IC = [args.c10, args.c20, args.vc10, args.vc20]
 
     plt.figure(figsize=(12, 6))
