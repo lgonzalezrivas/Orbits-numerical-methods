@@ -9,6 +9,8 @@ M = 1
 m=1
 k = G*M*m
 
+def normalize_angle(angle):
+    return angle % (2 * np.pi)
 
 def totalerrors(method, dt_values, IC, tf):
     errors = []
@@ -44,9 +46,11 @@ def totalerrors(method, dt_values, IC, tf):
             Mean = n * time  
             E = Mean  
             for _ in range(1000):  
+                E_prev = E
                 E = Mean + e * np.sin(E)
-
-            phi_an = 2 * np.arctan(np.sqrt((1 + e) / (1 - e)) * np.tan(E / 2)) 
+                if np.all(np.abs(E - E_prev) < 1e-10):  
+                    break
+            phi_an =  normalize_angle(2 * np.arctan(np.sqrt((1 + e) / (1 - e)) * np.tan(E / 2))) 
             r_an = a * (1 - e**2) / (1 + e * np.cos(phi_an))
             x_an = r_an * np.cos(phi_an+ phi0)
             y_an = r_an * np.sin(phi_an+ phi0)  
@@ -70,7 +74,7 @@ def main():
     parser.add_argument('--method2', type=str, choices=['rk2_cartesian', 'euler_cartesian'], default=None)
     args = parser.parse_args()
 
-    dt_values = np.logspace(-4, 0, 10)
+    dt_values = np.logspace(-4, -1, 10)
     IC = [args.c10, args.c20, args.vc10, args.vc20]
 
     plt.figure(figsize=(12, 6))

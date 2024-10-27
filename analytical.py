@@ -5,7 +5,8 @@ G = 1
 M = 1
 m = 1
 k = G * m * M
-
+def normalize_angle(angle):
+    return angle % (2 * np.pi)
 def analytical_cartesian(IC, tf, dt):
     x0 = IC[0]
     y0 = IC[1]
@@ -33,7 +34,7 @@ def analytical_cartesian(IC, tf, dt):
 
         for _ in range(1000):  
             E = Mean + e * np.sin(E)
-        phi_an = 2 * np.arctan(np.sqrt((1 + e) / (1 - e)) * np.tan(E / 2)) 
+        phi_an = normalize_angle(2 * np.arctan(np.sqrt((1 + e) / (1 - e)) * np.tan(E / 2))) 
         r_an = a * (1 - e**2) / (1 + e * np.cos(phi_an))  
         
         x_analytical = r_an * np.cos(phi_an+ phi0)
@@ -65,8 +66,11 @@ def analytical_polar(IC, tf, dt):
         E = Mean  
 
         for _ in range(1000):  
+            E_prev = E
             E = Mean + e * np.sin(E)
-        phi_an = 2 * np.arctan(np.sqrt((1 + e) / (1 - e)) * np.tan(E / 2)) 
+            if np.all(np.abs(E - E_prev) < 1e-10):  
+                break
+        phi_an = normalize_angle(2 * np.arctan(np.sqrt((1 + e) / (1 - e)) * np.tan(E / 2))) 
         r_an = a * (1 - e**2) / (1 + e * np.cos(phi_an))  
         
         x_analytical = r_an * np.cos(phi_an+ phi0)
