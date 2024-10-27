@@ -1,7 +1,7 @@
 import numpy as np
 
 G, M,m = 1, 1, 1  
-alpha = 0.5
+alpha = 0.002
 def drag(IC, tf, dt):
     r, phi, vr, vphi = IC
 
@@ -13,7 +13,7 @@ def drag(IC, tf, dt):
         dphi= vphi/r
         dr= vr
         d2r = r*dphi**2 - G*M/r**2 -alpha*dr
-        d2phi= -2*dr * dphi/r 
+        d2phi= -2*dr * dphi/r -alpha*dphi
         k1 = np.array([dr, dphi, d2r, d2phi])
 
         r_pred = r + dt * k1[0]
@@ -21,7 +21,7 @@ def drag(IC, tf, dt):
         dr_pred = dr + dt * k1[2]
         dphi_pred = dphi + dt * k1[3]
         d2r_pred = r_pred*dphi_pred**2 - G*M/r_pred**2-alpha*dr_pred
-        d2phi_pred = -2*dr_pred * dphi_pred/r_pred
+        d2phi_pred = -2*dr_pred * dphi_pred/r_pred-alpha*dphi_pred  
         k2 = np.array([dr_pred, dphi_pred, d2r_pred, d2phi_pred])
 
         r += 0.5 * dt *(k1[0] + k2[0])
