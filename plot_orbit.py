@@ -9,17 +9,17 @@ def polar_to_cartesian(r, phi):
 def plot_orbit(time1, solution1, method_name1, solution2=None, method_name2=None):
     plt.figure(figsize=(12, 6))
 
-    if 'rk2_polar' in method_name1 or 'euler_polar' in method_name1 or 'drag' in method_name1:
+    if 'polar' in method_name1 and 'analytical' not in method_name1:
         r1 = solution1[:, 0]
         phi1 = solution1[:, 1]
         x1, y1 = polar_to_cartesian(r1, phi1)
     else:
         x1 = solution1[:, 0]
         y1 = solution1[:, 1]
-    plt.plot(x1, y1, color='blue', label=f'Orbit with {method_name1}')
+    plt.plot(x1, y1, color='purple', label=f'Orbit with {method_name1}')
 
     if solution2 is not None:
-        if 'rk2_polar' in method_name2 or 'euler_polar' in method_name2 or 'drag' in method_name2:            
+        if 'polar' in method_name2 and 'analytical' not in method_name2:
             r2 = solution2[:, 0]
             phi2 = solution2[:, 1]
             x2, y2 = polar_to_cartesian(r2, phi2)
@@ -27,7 +27,7 @@ def plot_orbit(time1, solution1, method_name1, solution2=None, method_name2=None
             x2 = solution2[:, 0]
             y2 = solution2[:, 1]
         plt.plot(x2, y2, color='red', linestyle='--',label=f'Orbit with {method_name2}')
-
+    plt.scatter(0, 0, color='red', s=150, label='Star')
     plt.xlabel('x')
     plt.ylabel('y')
     plt.title('Comparison of Orbits')

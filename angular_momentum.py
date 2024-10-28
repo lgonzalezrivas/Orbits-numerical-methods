@@ -1,15 +1,27 @@
-import numpy as np
-import matplotlib.pyplot as plt
 import argparse
-from euler_polar import euler_polar
-from euler_cartesian import euler_cartesian
-from rk2_cartesian import rk2_cartesian
-from rk2_polar import rk2_polar
+from plot_orbit import plot_orbit, polar_to_cartesian
+from euler import euler_polar, euler_cartesian
+from rk2 import rk2_cartesian, rk2_polar
+from analytical import analytical_polar, analytical_cartesian
+from drag import drag_rk2_polar, drag_rk2_cartesian, drag_euler_cartesian, drag_euler_polar
+import matplotlib.pyplot as plt
+import numpy as np
 
 m = 1 
+def drag_analytical(IC,tf,dt):
+    alpha= 0.002
+    r0 = IC[0]
+    vphi0 = IC[3]
+    L0 =  m * r0*vphi0
+    time = np.arange(0, tf, dt)
+    L = L0*np.exp(-alpha*time)
+    return L, time
 
 def plot_angular_momentum(time1, solution1, method1, time2=None, solution2=None, method2=None):
-    if 'polar' in method1:
+    if method1 == 'drag_analytical':
+        L1 = solution1
+
+    elif 'polar' in method1 and 'analytical' not in method1:
         r1 = solution1[:, 0]
         vphi1 = solution1[:, 3]
         L1 = m * r1 * vphi1  
@@ -24,7 +36,9 @@ def plot_angular_momentum(time1, solution1, method1, time2=None, solution2=None,
     plt.plot(time1, L1, label=f'Angular momentum ({method1})', color='blue')
 
     if time2 is not None and solution2 is not None:
-        if 'polar' in method2:
+        if method2 == 'drag_analytical':
+            L2=solution2
+        elif 'polar' in method2 and 'analytical' not in method2:
             r2 = solution2[:, 0]
             vphi2 = solution2[:, 3]
             L2 = m * r2 * vphi2  
@@ -52,36 +66,27 @@ def main():
     parser.add_argument('--vc20', type=float, required=True)
     parser.add_argument('--tf', type=float, required=True)
     parser.add_argument('--dt', type=float, required=True)
-    parser.add_argument('--method1', type=str, choices=['euler_cartesian', 'rk2_cartesian', 'euler_polar', 'rk2_polar'], required=True)
-    parser.add_argument('--method2', type=str, choices=['euler_cartesian', 'rk2_cartesian', 'euler_polar', 'rk2_polar'], required=True)
+    parser.add_argument('--method1', choices=['euler_cartesian', 'euler_polar', 'rk2_cartesian', 'rk2_polar', 'drag_analytical', 'drag_euler_cartesian', 'drag_euler_polar', 'drag_rk2_cartesian', 'drag_rk2_polar'])
+    parser.add_argument('--method2', choices=['euler_cartesian', 'euler_polar', 'rk2_cartesian', 'rk2_polar', 'drag_analytical', 'drag_euler_cartesian', 'drag_euler_polar', 'drag_rk2_cartesian', 'drag_rk2_polar'])
     args = parser.parse_args()
 
     IC = [args.c10, args.c20, args.vc10, args.vc20]
     tf = args.tf
     dt = args.dt  
+    if args.method1 == 'drag_analytical':
+        solution1, time1 = drag_analytical(IC, args.tf, args.dt)
+    else:
+        solution1, time1 = globals()[args.method1](IC, args.tf, args.dt)
 
-    # Método 1
-    if args.method1 == 'euler_cartesian':
-        solution1, time1 = euler_cartesian(IC, tf, dt)
-    elif args.method1 == 'rk2_cartesian':
-        solution1, time1 = rk2_cartesian(IC, tf, dt)
-    elif args.method1 == 'euler_polar':
-        solution1, time1 = euler_polar(IC, tf, dt)
-    elif args.method1 == 'rk2_polar':
-        solution1, time1 = rk2_polar(IC, tf, dt)
-
-    # Método 2
-    if args.method2 == 'euler_cartesian':
-        solution2, time2 = euler_cartesian(IC, tf, dt)
-    elif args.method2 == 'rk2_cartesian':
-        solution2, time2 = rk2_cartesian(IC, tf, dt)
-    elif args.method2 == 'euler_polar':
-        solution2, time2 = euler_polar(IC, tf, dt)
-    elif args.method2 == 'rk2_polar':
-        solution2, time2 = rk2_polar(IC, tf, dt)
+    solution2, time2 = None, None
+    if args.method2:
+        if args.method2 == 'drag_analytical':
+            solution2, time2 = drag_analytical(IC, args.tf, args.dt)
+        else:
+            solution2, time2 = globals()[args.method2](IC, args.tf, args.dt)
 
     plot_angular_momentum(time1, solution1, args.method1, time2, solution2, args.method2)
 
 if __name__ == "__main__":
     main()
-#python3 momentum.py --c10 1.0 --c20 0.0 --vc10 0.0 --vc20 1.0 --tf 1000 --dt 0.1 --method1 rk2_cartesian --method2 rk2_polar
+#python3 angular_momentum.py --c10 1 --c20 0 --vc10 0 --vc20 1.3 --tf 100 --dt 0.01 --method1 drag_euler_polar --method2 drag_analytical

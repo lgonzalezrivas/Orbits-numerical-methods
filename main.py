@@ -1,13 +1,9 @@
 import argparse
-from plot_orbit import plot_orbit 
-from plot_orbit import polar_to_cartesian
-from euler_polar import euler_polar
-from euler_cartesian import euler_cartesian
-from rk2_cartesian import rk2_cartesian
-from rk2_polar import rk2_polar
-from analytical import analytical_polar
-from analytical import analytical_cartesian
-from drag import drag
+from plot_orbit import plot_orbit, polar_to_cartesian
+from euler import euler_polar,  euler_cartesian
+from rk2 import rk2_cartesian, rk2_polar
+from analytical import analytical_polar, analytical_cartesian
+from drag import drag_rk2_polar, drag_rk2_cartesian, drag_euler_cartesian, drag_euler_polar
 import matplotlib.pyplot as plt
 
 
@@ -19,15 +15,15 @@ def main():
     parser.add_argument('--vc20', type=float, required=True)
     parser.add_argument('--tf', type=float, required=True)
     parser.add_argument('--dt', type=float, required=True)
-    parser.add_argument('--method1', choices=['euler_cartesian', 'euler_polar', 'rk2_cartesian', 'rk2_polar', 'analytical_polar', 'analytical_cartesian', 'drag'])
-    parser.add_argument('--method2', choices=['euler_cartesian', 'euler_polar', 'rk2_cartesian', 'rk2_polar', 'analytical_polar', 'analytical_cartesian', 'drag'])
+    parser.add_argument('--method1', choices=['euler_cartesian', 'euler_polar', 'rk2_cartesian', 'rk2_polar', 'analytical_polar', 'analytical_cartesian', 'drag_euler_cartesian', 'drag_euler_polar', 'drag_rk2_cartesian', 'drag_rk2_polar'])
+    parser.add_argument('--method2', choices=['euler_cartesian', 'euler_polar', 'rk2_cartesian', 'rk2_polar', 'analytical_polar', 'analytical_cartesian', 'drag_euler_cartesian', 'drag_euler_polar', 'drag_rk2_cartesian', 'drag_rk2_polar'])
 
 
     args = parser.parse_args()
 
     IC = [args.c10, args.c20, args.vc10, args.vc20]
 
-    if 'polar' in args.method1 or 'drag' in args.method1:
+    if 'polar' in args.method1:
         solution1, time1 = globals()[args.method1](IC, args.tf, args.dt)
         method_type1 = 'polar'
     else:
@@ -36,7 +32,7 @@ def main():
 
     solution2, method_type2 = None, None
     if args.method2:
-        if 'polar' in args.method2 or 'drag' in args.method1:
+        if 'polar' in args.method2:
             solution2, time2 = globals()[args.method2](IC, args.tf, args.dt)
             method_type2 = 'polar'
         else:

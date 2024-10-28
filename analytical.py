@@ -33,7 +33,10 @@ def analytical_cartesian(IC, tf, dt):
         E = Mean  
 
         for _ in range(1000):  
+            E_prev = E
             E = Mean + e * np.sin(E)
+            if np.all(np.abs(E - E_prev) < 1e-10):  
+                break
         phi_an = normalize_angle(2 * np.arctan(np.sqrt((1 + e) / (1 - e)) * np.tan(E / 2))) 
         r_an = a * (1 - e**2) / (1 + e * np.cos(phi_an))  
         
