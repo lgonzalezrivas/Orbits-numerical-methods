@@ -1,12 +1,14 @@
 import numpy as np
 
 G, M,m = 1, 1, 1  
-alpha = 0.01
 
 
-def drag_rk2_polar(IC, tf, dt):
-    r, phi, vr, vphi = IC
-
+def drag_rk2_polar2(P, tf, dt):
+    e,a, alpha = P
+    phi=0
+    r=a*(1-e)
+    vr=0
+    vphi= np.sqrt(G*M/a*(1+e)/(1-e))
     time = np.arange(0, tf, dt)
     solution = np.zeros((len(time), 4))
     solution[0] = [r, phi, vr, vphi]
@@ -41,9 +43,12 @@ def drag_rk2_polar(IC, tf, dt):
 
     return solution, time
 
-def drag_rk2_cartesian(IC, tf, dt):
-    x, y , vx, vy = IC
-
+def drag_rk2_cartesian2(P, tf, dt):
+    e,a, alpha = P
+    x=a*(1-e)
+    y=0
+    vx=0
+    vy= np.sqrt(G*M/a*(1+e)/(1-e))
     time = np.arange(0, tf, dt)
     solution = np.zeros((len(time), 4))
     solution[0] = [x, y, vx, vy]
@@ -78,9 +83,12 @@ def drag_rk2_cartesian(IC, tf, dt):
 
     return solution, time
 
-def drag_euler_cartesian(IC, tf, dt):
-    x, y , vx, vy = IC
-
+def drag_euler_cartesian2(P, tf, dt):
+    e,a, alpha = P
+    x=a*(1-e)
+    y=0
+    vy=np.sqrt(G*M/a*(1+e)/(1-e))
+    vx=0
     time = np.arange(0, tf, dt)
     solution = np.zeros((len(time), 4))
     solution[0] = [x, y, vx, vy]
@@ -108,8 +116,12 @@ def drag_euler_cartesian(IC, tf, dt):
 
 
 
-def drag_euler_polar(IC, tf, dt):
-    r, phi, vr, vphi = IC
+def drag_euler_polar2(P, tf, dt):
+    e,a, alpha = P
+    phi=0
+    r=a*(1-e)
+    vr=0
+    vphi= np.sqrt(G*M/a*(1+e)/(1-e))
 
     time = np.arange(0, tf, dt)
     solution = np.zeros((len(time), 4))

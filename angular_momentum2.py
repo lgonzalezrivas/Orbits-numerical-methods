@@ -2,16 +2,16 @@ import argparse
 from plot_orbit2 import plot_orbit2, polar_to_cartesian2
 from euler2 import euler_polar2,  euler_cartesian2
 from rk22 import rk2_cartesian2, rk2_polar2
-from analytical2 import analytical_polar2, analytical_cartesian2
+from analytical2 import analytical2
 from drag2 import drag_rk2_polar2, drag_rk2_cartesian2, drag_euler_cartesian2, drag_euler_polar2
 import matplotlib.pyplot as plt
 import numpy as np
-
+G, M = 1,1
 m = 1 
 def drag_analytical2(P,tf,dt):
     e,a, alpha= P
-    r0 = a
-    vphi0 = np.sqrt(G*M/a*(1-e)/(1+e))
+    r0 = a*(1-e)
+    vphi0 = np.sqrt(G*M/a*(1+e)/(1-e))
     L0 =  m * r0*vphi0
     time = np.arange(0, tf, dt)
     L = L0*np.exp(-alpha*time)
@@ -88,4 +88,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-#python3 angular_momentum.py --c10 1 --c20 0 --vc10 0 --vc20 1.3 --tf 100 --dt 0.01 --method1 drag_euler_polar --method2 drag_analytical
+#python3 angular_momentum2.py --e 0 --a 1 --alpha 1 --tf 100 --dt 0.01 --method1 drag_euler_polar2 --method2 drag_analytical2
