@@ -172,8 +172,26 @@ def main():
         else:
             errors2 = totalerrors_cartesian2(args.method2,dt_values, P, args.tf )    
         plt.loglog(dt_values, errors2, marker='o', linestyle='--', color='red',label=f'{args.method2}')
+    
 
 
+    if 'euler' in args.method1:
+        min_error1 = min(errors1)
+        slope1 = min_error1*(dt_values/dt_values[0])
+        plt.loglog(dt_values, slope1, 'k--', label="Slope equal to 1")
+    else: 
+        min_error1 = min(errors1)
+        slope1 = min_error1*(dt_values/dt_values[0])**2
+        plt.loglog(dt_values, slope1, 'k--', label="Slope equal to 2")     
+
+    if 'euler' in args.method2:
+        min_error2 = min(errors2)
+        slope2 = min_error2*(dt_values/dt_values[0])
+        plt.loglog(dt_values, slope2, color='gray', linestyle='--', label="Slope equal to 1")
+    else: 
+        min_error2 = min(errors2)
+        slope2 = min_error2*(dt_values/dt_values[0])**2
+        plt.loglog(dt_values, slope2, color='gray', linestyle='--', label="Slope equal to 2")     
 
     plt.xlabel('dt')
     plt.ylabel('Absolute error')

@@ -157,7 +157,7 @@ def main():
     parser.add_argument('--method2', choices=['euler_cartesian2', 'euler_polar2', 'rk2_cartesian2', 'rk2_polar2',  'drag_euler_cartesian2', 'drag_euler_polar2', 'drag_rk2_cartesian2', 'drag_rk2_polar2'])
     args = parser.parse_args()
 
-    e_values = np.linspace(0, 0.9, 10)
+    e_values = np.logspace(-3, 0, 10)
     a = args.a
     alpha = args.alpha
     tf = args.tf
@@ -168,14 +168,14 @@ def main():
         errors1 = totalerrors_polar2(args.method1, e_values, a, alpha, tf, dt)
     else:
         errors1 = totalerrors_cartesian2(args.method1, e_values, a, alpha, tf, dt)
-    plt.plot(e_values, errors1, marker='o', linestyle='--', color='blue', label=f'{args.method1}')
+    plt.loglog(e_values, errors1, marker='o', linestyle='--', color='blue', label=f'{args.method1}')
 
     if args.method2:
         if 'polar' in args.method2:
             errors2 = totalerrors_polar2(args.method2, e_values, a, alpha, tf, dt)
         else:
             errors2 = totalerrors_cartesian2(args.method2, e_values, a, alpha, tf, dt)
-        plt.plot(e_values, errors2, marker='o', linestyle='--', color='red', label=f'{args.method2}')
+        plt.loglog(e_values, errors2, marker='o', linestyle='--', color='red', label=f'{args.method2}')
 
     plt.xlabel('Eccentricity (e)')
     plt.ylabel('Absolute error')
