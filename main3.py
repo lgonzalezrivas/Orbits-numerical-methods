@@ -9,8 +9,9 @@ import matplotlib.pyplot as plt
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--e', type=float, required=True)
-    parser.add_argument('--a', type=float, required=True) 
+    parser.add_argument('--r0', type=float, required=True)
+    parser.add_argument('--vphi0', type=float, required=True) 
+    parser.add_argument('--vr0', type=float, required=True) 
     parser.add_argument('--alpha', type=float, required=True) 
 
     parser.add_argument('--tf', type=float, required=True)
@@ -21,7 +22,7 @@ def main():
 
     args = parser.parse_args()
 
-    P = [args.e, args.a,args.alpha]
+    P = [args.r0, args.vphi0,args.vr0,args.alpha]
 
     if 'polar' in args.method1:
         solution1, time1 = globals()[args.method1](P, args.tf, args.dt)
@@ -41,4 +42,4 @@ def main():
 if __name__ == "__main__":
     main()
 
-#python3 main2.py --e 0 --a 1.0 --tf 10 --dt 0.1 --method1 euler_polar2 --method2 analytical2
+#python3 main2.py --r0 0 --v0 1.0 --tf 10 --dt 0.1 --method1 euler_polar2 --method2 analytical2
