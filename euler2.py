@@ -1,4 +1,6 @@
 import numpy as np
+import time
+
 G, M = 1, 1
 def euler_cartesian2(P, tf, dt):
     e,a, alpha = P
@@ -66,3 +68,23 @@ def euler_polar2(P, tf, dt):
 
     return solution, time
 
+
+
+
+def main():
+    P = [0, 1, 0.0011]
+    tf = 30
+    dt = 0.001
+
+    start_time = time.time()  
+    solution, time_vals = euler_cartesian2(P, tf, dt)
+    end_time = time.time()  
+    print(f"Tiempo de ejecución para euler_cartesian2: {end_time - start_time:.6f} segundos")
+
+    start_time = time.time()  
+    solution, time_vals = euler_polar2(P, tf, dt)
+    end_time = time.time()  
+    print(f"Tiempo de ejecución para euler_polar2: {end_time - start_time:.6f} segundos")
+
+if __name__ == "__main__":
+    main()

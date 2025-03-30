@@ -92,7 +92,7 @@ def main():
     parser.add_argument('--method2', choices=['drag_euler_cartesian2', 'drag_euler_polar2', 'drag_rk2_cartesian2', 'drag_rk2_polar2'])
     args = parser.parse_args()
 
-    alpha_values = np.logspace(-5, 1, 7)
+    alpha_values = np.logspace(-7, 0, 8)
     e= args.e
     a = args.a
     tf = args.tf
