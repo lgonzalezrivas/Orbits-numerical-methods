@@ -1,10 +1,25 @@
-This code is made to model the orbit of one body around another through 2 numerical methods: the euler and the second order runge kutta. c10, c20, vc10, vc20 refer to the initial values of coordinate 1, coordinate 2, coordinate 1 velocity and coordinate 2 velocity, respectively. Note that vc20 in polar is vphi0 which is equal to r*dphi/dt. With main.py you can plot the orbit with one numerical method or two (to do this, you have to delete --method2)
+This code is made to model the orbit of one body around another through 2 numerical methods: the euler and the second order runge kutta. 
+
+I created two versions of each code that vary with the initial conditions. 
+
+If it doesn't end in 2, then the values ​​and velocity of each coordinate are used and executed as follows:
+python3 main.py --c10 1.0 --c20 0.0 --vc10 0.0 --vc20 1.0 --tf 100 --method1 rk2_polar --method2 euler_polar
 
 
+Whereas if it ends in 2, then the eccentricity and semimajor axis are used (the initial angle is 0), and it must be executed with:
 python3 main2.py --e 0 --a 1.0 --alpha 0.001 --tf 30 --dt 0.001 --method1 drag_rk2_polar2 --method2 drag_rk2_cartesian2
 
 
-main.py: python error_polar.py --c10 1.0 --c20 0.0 --vc10 0.0 --vc20 1.0 --tf 100 --method1 rk2_polar --method2 euler_polar
-plot_energy.py: python plot_energy.py --c10 1.0 --c20 0.0 --vc10 0.0 --vc20 1.0 --tf 100.0 --dt 0.0001 --method rk2_polar
-error_cartesian.py: python error_cartesian.py --c10 1.0 --c20 0.0 --vc10 0.0 --vc20 1.0 --tf 10.0 --method1 rk2_cartesian --method2 euler_cartesian
-error_polar: python error_polar.py --c10 1.0 --c20 0.0 --vc10 0.0 --vc20 1.0 --tf 100 --method1 rk2_polar --method2 euler_polar
+In both cases, you just need to change main.py to error.py, angular_momentum.py, etc, to use other codes.
+
+To obtain the time it takes to calculate each orbit, you must adjust the parameters within the code and then execute 
+the codes euler.py, euler2.py, rk2.pym, and rk22.py directly, that is, Python3 rk2.py.
+
+
+c10, c20, vc10, vc20 refer to the initial values of coordinate 1, coordinate 2, coordinate 1 velocity and coordinate 2 
+velocity, respectively. 
+Note that vc20 in polar is vphi0 which is equal to r*dphi/dt. With main.py you can plot the orbit with one numerical
+method or two (to do this, you have to delete --method2)
+
+
+
