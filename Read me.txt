@@ -23,3 +23,4 @@ method or two (to do this, you have to delete --method2)
 
 
 
+P.S., codes ending in 3 are an attempt to implement an analytical solution.
